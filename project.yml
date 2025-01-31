@@ -1,0 +1,19 @@
+name: VoltFlow
+options:
+  bundleIdPrefix: com.voltflow
+targets:
+  VoltFlow:
+    type: application
+    platform: iOS
+    deploymentTarget: "14.0"
+    sources: [VoltFlow]
+    info:
+      path: VoltFlow/Info.plist
+      properties:
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        UILaunchStoryboardName: LaunchScreen
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        NSLocationWhenInUseUsageDescription: "VoltFlow needs your location to find nearby charging stations."
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
