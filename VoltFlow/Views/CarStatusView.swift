@@ -63,144 +63,66 @@ struct CarStatusView: View {
                             // Status indicators
                             HStack(spacing: 40) {
                                 // Battery status
-                                VStack(spacing: 8) {
-                                    ZStack {
-                                        Circle()
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 3)
-                                            .frame(width: 60, height: 60)
-                                        
-                                        Circle()
-                                            .trim(from: 0, to: car.batteryLevel)
-                                            .stroke(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [.green, .blue]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                ),
-                                                style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                                            )
-                                            .frame(width: 60, height: 60)
-                                            .rotationEffect(.degrees(-90))
-                                        
-                                        VStack(spacing: 2) {
-                                            Text("\(Int(car.batteryLevel * 100))")
-                                                .font(.system(size: 16, weight: .medium))
-                                            Text("%")
-                                                .font(.system(size: 12))
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    Text("Battery")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
+                                AnimatedGauge(
+                                    value: car.batteryLevel * 100,
+                                    maxValue: 100,
+                                    gradient: LinearGradient(
+                                        gradient: Gradient(colors: [.green, .blue]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ),
+                                    label: "Battery",
+                                    unit: "%"
+                                )
                                 
                                 // Range indicator
-                                VStack(spacing: 8) {
-                                    ZStack {
-                                        Circle()
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 3)
-                                            .frame(width: 60, height: 60)
-                                        
-                                        Circle()
-                                            .trim(from: 0, to: min(car.range / 500, 1.0))
-                                            .stroke(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [.purple, .blue]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                ),
-                                                style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                                            )
-                                            .frame(width: 60, height: 60)
-                                            .rotationEffect(.degrees(-90))
-                                        
-                                        VStack(spacing: 2) {
-                                            Text("\(Int(car.range))")
-                                                .font(.system(size: 16, weight: .medium))
-                                            Text("km")
-                                                .font(.system(size: 12))
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    Text("Range")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
+                                AnimatedGauge(
+                                    value: car.range,
+                                    maxValue: 500,
+                                    gradient: LinearGradient(
+                                        gradient: Gradient(colors: [.purple, .blue]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ),
+                                    label: "Range",
+                                    unit: "km"
+                                )
                                 
                                 // Temperature
-                                VStack(spacing: 8) {
-                                    ZStack {
-                                        Circle()
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 3)
-                                            .frame(width: 60, height: 60)
-                                        
-                                        Circle()
-                                            .trim(from: 0, to: (car.temperature + 20) / 60)
-                                            .stroke(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [.orange, .red]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                ),
-                                                style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                                            )
-                                            .frame(width: 60, height: 60)
-                                            .rotationEffect(.degrees(-90))
-                                        
-                                        VStack(spacing: 2) {
-                                            Text("\(Int(car.temperature))")
-                                                .font(.system(size: 16, weight: .medium))
-                                            Text("°C")
-                                                .font(.system(size: 12))
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    Text("Temp")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
+                                AnimatedGauge(
+                                    value: car.temperature,
+                                    maxValue: 40,
+                                    gradient: LinearGradient(
+                                        gradient: Gradient(colors: [.orange, .red]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ),
+                                    label: "Temp",
+                                    unit: "°C"
+                                )
                             }
                             
                             // Quick actions
                             HStack(spacing: 30) {
-                                Button(action: {}) {
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "lock.fill")
-                                            .font(.system(size: 20))
-                                            .frame(width: 50, height: 50)
-                                            .background(Color.white.opacity(0.05))
-                                            .clipShape(Circle())
-                                        Text("Lock")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                    }
+                                QuickActionButton(
+                                    icon: "lock.fill",
+                                    label: "Lock"
+                                ) {
+                                    // Lock action
                                 }
                                 
-                                Button(action: {}) {
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "fanblades")
-                                            .font(.system(size: 20))
-                                            .frame(width: 50, height: 50)
-                                            .background(Color.white.opacity(0.05))
-                                            .clipShape(Circle())
-                                        Text("Climate")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                    }
+                                QuickActionButton(
+                                    icon: "fanblades",
+                                    label: "Climate"
+                                ) {
+                                    // Climate action
                                 }
                                 
-                                Button(action: {}) {
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "bolt.fill")
-                                            .font(.system(size: 20))
-                                            .frame(width: 50, height: 50)
-                                            .background(Color.white.opacity(0.05))
-                                            .clipShape(Circle())
-                                        Text("Charge")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                    }
+                                QuickActionButton(
+                                    icon: "bolt.fill",
+                                    label: "Charge"
+                                ) {
+                                    // Charge action
                                 }
                             }
                         }
@@ -388,6 +310,94 @@ struct BatteryView: View {
                     .frame(width: geometry.size.width * level)
                     .padding(2)
             }
+        }
+    }
+}
+
+struct AnimatedGauge: View {
+    let value: Double
+    let maxValue: Double
+    let gradient: LinearGradient
+    let label: String
+    let unit: String
+    
+    @State private var animatedValue: Double = 0
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            ZStack {
+                // Background circle
+                Circle()
+                    .stroke(Color.white.opacity(0.1), lineWidth: 3)
+                    .frame(width: 60, height: 60)
+                
+                // Animated progress
+                Circle()
+                    .trim(from: 0, to: animatedValue)
+                    .stroke(
+                        gradient,
+                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                    )
+                    .frame(width: 60, height: 60)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.spring(response: 1, dampingFraction: 0.8), value: animatedValue)
+                
+                // Value display
+                VStack(spacing: 2) {
+                    Text("\(Int(value))")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(unit)
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                }
+            }
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+        .onAppear {
+            // Animate from 0 to the actual value
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                animatedValue = value / maxValue
+            }
+        }
+        .onChange(of: value) { newValue in
+            withAnimation(.spring(response: 1, dampingFraction: 0.8)) {
+                animatedValue = newValue / maxValue
+            }
+        }
+    }
+}
+
+struct QuickActionButton: View {
+    let icon: String
+    let label: String
+    let action: () -> Void
+    @State private var isPressed = false
+    
+    var body: some View {
+        Button(action: {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                isPressed = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    isPressed = false
+                }
+            }
+            action()
+        }) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 20))
+                    .frame(width: 50, height: 50)
+                    .background(Color.white.opacity(0.05))
+                    .clipShape(Circle())
+                Text(label)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            .scaleEffect(isPressed ? 0.9 : 1.0)
         }
     }
 }
