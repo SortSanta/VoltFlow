@@ -143,7 +143,8 @@ struct ChargingMapView: View {
                     
                     // Search and filter
                     HStack(spacing: 12) {
-                        ZStack(alignment: .top) {
+                        // Search container
+                        VStack(spacing: 0) {
                             // Search field
                             HStack {
                                 Image(systemName: "magnifyingglass")
@@ -163,7 +164,7 @@ struct ChargingMapView: View {
                                 
                                 if !searchText.isEmpty {
                                     Button(action: { 
-                                        withAnimation {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
                                             searchText = "" 
                                         }
                                     }) {
@@ -176,47 +177,62 @@ struct ChargingMapView: View {
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
                             .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.white.opacity(0.2))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                                    )
-                                    .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color.white.opacity(!searchText.isEmpty ? 0.15 : 0.1))
+                                    .animation(.easeInOut(duration: 0.2), value: searchText)
                             )
                             
-                            // Search results dropdown
+                            // Search results
                             if !searchText.isEmpty {
-                                VStack(spacing: 1) {
-                                    ForEach(filteredStations.prefix(5)) { station in
-                                        SearchResultRow(station: station)
-                                            .onTapGesture {
+                                Divider()
+                                    .background(Color.white.opacity(0.1))
+                                    .padding(.horizontal, 16)
+                                
+                                VStack(spacing: 0) {
+                                    if filteredStations.isEmpty {
+                                        VStack(spacing: 8) {
+                                            Image(systemName: "magnifyingglass")
+                                                .font(.system(size: 24))
+                                                .foregroundColor(.white.opacity(0.6))
+                                            Text("No stations found")
+                                                .font(.system(size: 16))
+                                                .foregroundColor(.white.opacity(0.6))
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 20)
+                                    } else {
+                                        ForEach(filteredStations.prefix(5)) { station in
+                                            Button(action: {
                                                 withAnimation(.spring()) {
                                                     selectedStation = station
                                                     region.center = station.coordinate
                                                     searchText = ""
                                                 }
+                                            }) {
+                                                SearchResultRow(station: station)
+                                                    .contentShape(Rectangle())
                                             }
-                                            .background(Color.white.opacity(0.07))
-                                            .cornerRadius(8)
+                                            .buttonStyle(SearchResultButtonStyle())
+                                            
+                                            if station.id != filteredStations.prefix(5).last?.id {
+                                                Divider()
+                                                    .background(Color.white.opacity(0.1))
+                                                    .padding(.horizontal, 16)
+                                            }
+                                        }
                                     }
                                 }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 8)
-                                .offset(y: 60)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color(red: 0.15, green: 0.15, blue: 0.25))
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                        )
-                                        .shadow(color: .black.opacity(0.3), radius: 15, y: 5)
-                                )
-                                .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(red: 0.12, green: 0.12, blue: 0.18))
+                                .shadow(color: .black.opacity(0.3), radius: 20, y: 10)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                        )
                         
                         Button(action: { showingFilters.toggle() }) {
                             Image(systemName: "line.3.horizontal.decrease.circle.fill")
@@ -545,48 +561,59 @@ struct SearchResultRow: View {
     let station: ChargingStation
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 16) {
+            // Station type indicator
             ZStack {
                 Circle()
-                    .fill(station.type.color.opacity(0.2))
-                    .frame(width: 32, height: 32)
+                    .fill(station.type.color.opacity(0.15))
+                    .frame(width: 40, height: 40)
                 
-                Circle()
-                    .fill(station.type.color)
-                    .frame(width: 8, height: 8)
+                Image(systemName: "bolt.fill")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(station.type.color)
             }
             
+            // Station details
             VStack(alignment: .leading, spacing: 4) {
                 Text(station.name)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.white)
                 
-                HStack(spacing: 8) {
-                    Text("\(station.powerOutput)kW")
-                    Text("•")
-                        .foregroundColor(.white.opacity(0.3))
-                    Text("$\(String(format: "%.2f", station.price))/kWh")
-                    Text("•")
-                        .foregroundColor(.white.opacity(0.3))
-                    Text("\(String(format: "%.1f", station.distance))mi")
+                HStack(spacing: 16) {
+                    Label("\(station.powerOutput)kW", systemImage: "bolt.fill")
+                    Label("$\(String(format: "%.2f", station.price))", systemImage: "dollarsign")
+                    Label("\(String(format: "%.1f", station.distance))mi", systemImage: "location.fill")
                 }
-                .font(.system(size: 14))
+                .font(.system(size: 13))
                 .foregroundColor(.white.opacity(0.7))
             }
             
             Spacer()
             
+            // Availability indicator
             Text("\(station.available)/\(station.total)")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.white.opacity(0.9))
-                .padding(.vertical, 4)
-                .padding(.horizontal, 8)
-                .background(Color.white.opacity(0.1))
-                .cornerRadius(6)
+                .foregroundColor(.white)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(
+                    Capsule()
+                        .fill(Color.white.opacity(0.1))
+                )
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .contentShape(Rectangle())
+    }
+}
+
+struct SearchResultButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                Color.white.opacity(configuration.isPressed ? 0.15 : 0.05)
+                    .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+            )
+            .contentShape(Rectangle())
     }
 }
 
