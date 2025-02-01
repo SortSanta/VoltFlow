@@ -1,4 +1,5 @@
 import Foundation
+import CoreLocation
 
 enum CarBrand: String, Codable {
     case tesla
@@ -6,6 +7,16 @@ enum CarBrand: String, Codable {
     case bmw
     case audi
     case volkswagen
+}
+
+struct Location: Codable {
+    let latitude: Double
+    let longitude: Double
+    let address: String?
+    
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 }
 
 struct Car: Identifiable {
@@ -51,9 +62,8 @@ struct Car: Identifiable {
          location: Location, 
          isCharging: Bool, 
          temperature: Double, 
-         mileage: Double = 0, 
-         engineStarted: Bool = true) {
-        
+         mileage: Double, 
+         engineStarted: Bool) {
         self.id = id
         self.brand = brand
         self.model = model
@@ -65,10 +75,4 @@ struct Car: Identifiable {
         self.mileage = mileage
         self.engineStarted = engineStarted
     }
-}
-
-struct Location: Codable {
-    let latitude: Double
-    let longitude: Double
-    let address: String?
 }

@@ -3,343 +3,309 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 56;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		42EF81D22D4D3B5E0022E999 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42EF81B92D4D3B580022E999 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 42EF81C02D4D3B580022E999;
-			remoteInfo = VoltFlow;
-		};
-		42EF81DC2D4D3B5E0022E999 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42EF81B92D4D3B580022E999 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 42EF81C02D4D3B580022E999;
-			remoteInfo = VoltFlow;
-		};
-/* End PBXContainerItemProxy section */
+/* Begin PBXBuildFile section */
+		01B51B1A811509AE976A07D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCEDF3B0EF02727F4911B3D4 /* Assets.xcassets */; };
+		05B4BA6747DA9CDD044A103D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07ECBF7CC9DD7D62A7913254 /* Preview Assets.xcassets */; };
+		0916CF13F1652DB8AB9C5F72 /* BiometricAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB8A9E862BADB8BC7C4EC /* BiometricAuthService.swift */; };
+		0D2166849E5BBC4AC779BE51 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28297A5A9264EABA04C75B3F /* AuthenticationView.swift */; };
+		451125BCAE78C60C667D3FEF /* CarStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993763544BFBF6A493052530 /* CarStatusView.swift */; };
+		4AB9E4FB3CD2579216F7FB49 /* CarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FACF7C4D83A6A4E17355D2 /* CarService.swift */; };
+		541AF628B4C6683CCCCA6D21 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F48C6B15E6F2D6E1E2B24B0 /* LocationManager.swift */; };
+		546C19FDB5992660C9E2B7CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F884578ED0D33C1113DBDD51 /* LaunchScreen.storyboard */; };
+		5CB8D7C79F8AC01C2CEEA681 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68E4D5B7B42E8469ADBF032 /* FirebaseService.swift */; };
+		6395B51108D4AEC059364418 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30801FC5468585A1EBB62DB /* KeychainService.swift */; };
+		64C3BBC32603D05D7F7A176E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADA6EBD9F13CB228B043D53 /* FirebaseAuth */; };
+		721EE2BA4157200626C2991D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 644EDD3A28BB20F69AFC22F4 /* GoogleService-Info.plist */; };
+		7E4F770EB1BD205F409B84D7 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9BFDE8E73A4CDFBF9AD9D9 /* Car.swift */; };
+		80729B362A21F80A90FD71EE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B122E298F726A96C41ED0D96 /* ContentView.swift */; };
+		8BAD942C645EE7E184001C55 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 6FB9C72BA48A2B208FC65BB4 /* FirebaseFirestore */; };
+		9012AE3C7B3DCE5C4B9CE8C5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FFAAB46FDFB70A72EF9E3C6B /* FirebaseAnalytics */; };
+		91592057CED57484AFE3C689 /* ChargingStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C35E20EB2E081BAF13429A /* ChargingStation.swift */; };
+		92B32722E7359ECA13A41EA8 /* TomTomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F80F74FB706ACF8AF119A5 /* TomTomResponse.swift */; };
+		93E9C5D4AE01B6B36524748E /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A23F2397399238AB0F9B5CD8 /* FirebaseFirestoreSwift */; };
+		AA4951C047AA9E310C9349CC /* VoltFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00AF1C60ED3C6279B33D741 /* VoltFlowApp.swift */; };
+		AA9ED2A8468C99F8A1B17512 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E562B00F3311B3669E69F /* LaunchScreenView.swift */; };
+		D00E9AB35E901377B2B4BB45 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1865ADDE37A52111C71C2E8D /* AuthenticationService.swift */; };
+		DA7C5C7A3FF243852243B1EB /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A19162C61DBDF6CF102B9 /* ProfileView.swift */; };
+		DAA51A3E0E0BFA4EEAF25F33 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E979BAB256BD068BE8389DB /* Config.swift */; };
+		E6F229A6D0FE7401DD5A683C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1916407EAD44B0E8FD85AE7 /* User.swift */; };
+		FD75815B4018595B292E9F6E /* ChargingMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1287A2DB3C34402DFB27279 /* ChargingMapView.swift */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		42EF81C12D4D3B580022E999 /* VoltFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoltFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		42EF81D12D4D3B5E0022E999 /* VoltFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoltFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		42EF81DB2D4D3B5E0022E999 /* VoltFlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoltFlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		052E562B00F3311B3669E69F /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
+		067B394FA097E7FACBF24D78 /* VoltFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoltFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07ECBF7CC9DD7D62A7913254 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0E979BAB256BD068BE8389DB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		0F48C6B15E6F2D6E1E2B24B0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		0FBEB8A9E862BADB8BC7C4EC /* BiometricAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthService.swift; sourceTree = "<group>"; };
+		10F80F74FB706ACF8AF119A5 /* TomTomResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomTomResponse.swift; sourceTree = "<group>"; };
+		1865ADDE37A52111C71C2E8D /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		28297A5A9264EABA04C75B3F /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		2B3B68689D339D96251C606A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		644EDD3A28BB20F69AFC22F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8D9BFDE8E73A4CDFBF9AD9D9 /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
+		93D150F6E195C584D2C54A14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		993763544BFBF6A493052530 /* CarStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarStatusView.swift; sourceTree = "<group>"; };
+		A52A19162C61DBDF6CF102B9 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		B00AF1C60ED3C6279B33D741 /* VoltFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltFlowApp.swift; sourceTree = "<group>"; };
+		B122E298F726A96C41ED0D96 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B3C35E20EB2E081BAF13429A /* ChargingStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingStation.swift; sourceTree = "<group>"; };
+		B68E4D5B7B42E8469ADBF032 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		B7FACF7C4D83A6A4E17355D2 /* CarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarService.swift; sourceTree = "<group>"; };
+		CCEDF3B0EF02727F4911B3D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E1916407EAD44B0E8FD85AE7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		F1287A2DB3C34402DFB27279 /* ChargingMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingMapView.swift; sourceTree = "<group>"; };
+		F30801FC5468585A1EBB62DB /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		42EF81C32D4D3B580022E999 /* VoltFlow */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VoltFlow;
-			sourceTree = "<group>";
-		};
-		42EF81D42D4D3B5E0022E999 /* VoltFlowTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VoltFlowTests;
-			sourceTree = "<group>";
-		};
-		42EF81DE2D4D3B5E0022E999 /* VoltFlowUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VoltFlowUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		42EF81BE2D4D3B580022E999 /* Frameworks */ = {
+		96BE5B1BFF15321AD3CA8474 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42EF81CE2D4D3B5E0022E999 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42EF81D82D4D3B5E0022E999 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				9012AE3C7B3DCE5C4B9CE8C5 /* FirebaseAnalytics in Frameworks */,
+				64C3BBC32603D05D7F7A176E /* FirebaseAuth in Frameworks */,
+				8BAD942C645EE7E184001C55 /* FirebaseFirestore in Frameworks */,
+				93E9C5D4AE01B6B36524748E /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		42EF81B82D4D3B580022E999 = {
+		0070FD91129A0B444AD93036 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				42EF81C32D4D3B580022E999 /* VoltFlow */,
-				42EF81D42D4D3B5E0022E999 /* VoltFlowTests */,
-				42EF81DE2D4D3B5E0022E999 /* VoltFlowUITests */,
-				42EF81C22D4D3B580022E999 /* Products */,
+				28297A5A9264EABA04C75B3F /* AuthenticationView.swift */,
+				993763544BFBF6A493052530 /* CarStatusView.swift */,
+				F1287A2DB3C34402DFB27279 /* ChargingMapView.swift */,
+				052E562B00F3311B3669E69F /* LaunchScreenView.swift */,
+				A52A19162C61DBDF6CF102B9 /* ProfileView.swift */,
 			);
+			path = Views;
 			sourceTree = "<group>";
 		};
-		42EF81C22D4D3B580022E999 /* Products */ = {
+		2040AD6FEB6677A83F262201 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				42EF81C12D4D3B580022E999 /* VoltFlow.app */,
-				42EF81D12D4D3B5E0022E999 /* VoltFlowTests.xctest */,
-				42EF81DB2D4D3B5E0022E999 /* VoltFlowUITests.xctest */,
+				1865ADDE37A52111C71C2E8D /* AuthenticationService.swift */,
+				0FBEB8A9E862BADB8BC7C4EC /* BiometricAuthService.swift */,
+				B7FACF7C4D83A6A4E17355D2 /* CarService.swift */,
+				B68E4D5B7B42E8469ADBF032 /* FirebaseService.swift */,
+				F30801FC5468585A1EBB62DB /* KeychainService.swift */,
+				0F48C6B15E6F2D6E1E2B24B0 /* LocationManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		396020CF33A15752A0A46630 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				07ECBF7CC9DD7D62A7913254 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		4C70EE91CA69271F018EF813 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				067B394FA097E7FACBF24D78 /* VoltFlow.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B2CEE2A89F3DAFA4A3FB4CA4 /* VoltFlow */ = {
+			isa = PBXGroup;
+			children = (
+				CCEDF3B0EF02727F4911B3D4 /* Assets.xcassets */,
+				0E979BAB256BD068BE8389DB /* Config.swift */,
+				B122E298F726A96C41ED0D96 /* ContentView.swift */,
+				644EDD3A28BB20F69AFC22F4 /* GoogleService-Info.plist */,
+				93D150F6E195C584D2C54A14 /* Info.plist */,
+				F884578ED0D33C1113DBDD51 /* LaunchScreen.storyboard */,
+				B00AF1C60ED3C6279B33D741 /* VoltFlowApp.swift */,
+				B5123760C47831ABCB37D72C /* Models */,
+				396020CF33A15752A0A46630 /* Preview Content */,
+				2040AD6FEB6677A83F262201 /* Services */,
+				0070FD91129A0B444AD93036 /* Views */,
+			);
+			path = VoltFlow;
+			sourceTree = "<group>";
+		};
+		B5123760C47831ABCB37D72C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8D9BFDE8E73A4CDFBF9AD9D9 /* Car.swift */,
+				B3C35E20EB2E081BAF13429A /* ChargingStation.swift */,
+				10F80F74FB706ACF8AF119A5 /* TomTomResponse.swift */,
+				E1916407EAD44B0E8FD85AE7 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DC613FB29591B3A982D1BB47 = {
+			isa = PBXGroup;
+			children = (
+				B2CEE2A89F3DAFA4A3FB4CA4 /* VoltFlow */,
+				4C70EE91CA69271F018EF813 /* Products */,
+			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42EF81C02D4D3B580022E999 /* VoltFlow */ = {
+		90990F3B7DA2D5EDE14CF3A8 /* VoltFlow */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42EF81E52D4D3B5E0022E999 /* Build configuration list for PBXNativeTarget "VoltFlow" */;
+			buildConfigurationList = 89F8984CED3D8BCE1B555004 /* Build configuration list for PBXNativeTarget "VoltFlow" */;
 			buildPhases = (
-				42EF81BD2D4D3B580022E999 /* Sources */,
-				42EF81BE2D4D3B580022E999 /* Frameworks */,
-				42EF81BF2D4D3B580022E999 /* Resources */,
+				D028C5C82E34EF2A3E320EE4 /* Sources */,
+				70FAECC9AA01DEFD0B07CC48 /* Resources */,
+				96BE5B1BFF15321AD3CA8474 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				42EF81C32D4D3B580022E999 /* VoltFlow */,
 			);
 			name = VoltFlow;
 			packageProductDependencies = (
+				FFAAB46FDFB70A72EF9E3C6B /* FirebaseAnalytics */,
+				2ADA6EBD9F13CB228B043D53 /* FirebaseAuth */,
+				6FB9C72BA48A2B208FC65BB4 /* FirebaseFirestore */,
+				A23F2397399238AB0F9B5CD8 /* FirebaseFirestoreSwift */,
 			);
 			productName = VoltFlow;
-			productReference = 42EF81C12D4D3B580022E999 /* VoltFlow.app */;
+			productReference = 067B394FA097E7FACBF24D78 /* VoltFlow.app */;
 			productType = "com.apple.product-type.application";
-		};
-		42EF81D02D4D3B5E0022E999 /* VoltFlowTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 42EF81E82D4D3B5E0022E999 /* Build configuration list for PBXNativeTarget "VoltFlowTests" */;
-			buildPhases = (
-				42EF81CD2D4D3B5E0022E999 /* Sources */,
-				42EF81CE2D4D3B5E0022E999 /* Frameworks */,
-				42EF81CF2D4D3B5E0022E999 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				42EF81D32D4D3B5E0022E999 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				42EF81D42D4D3B5E0022E999 /* VoltFlowTests */,
-			);
-			name = VoltFlowTests;
-			packageProductDependencies = (
-			);
-			productName = VoltFlowTests;
-			productReference = 42EF81D12D4D3B5E0022E999 /* VoltFlowTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		42EF81DA2D4D3B5E0022E999 /* VoltFlowUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 42EF81EB2D4D3B5E0022E999 /* Build configuration list for PBXNativeTarget "VoltFlowUITests" */;
-			buildPhases = (
-				42EF81D72D4D3B5E0022E999 /* Sources */,
-				42EF81D82D4D3B5E0022E999 /* Frameworks */,
-				42EF81D92D4D3B5E0022E999 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				42EF81DD2D4D3B5E0022E999 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				42EF81DE2D4D3B5E0022E999 /* VoltFlowUITests */,
-			);
-			name = VoltFlowUITests;
-			packageProductDependencies = (
-			);
-			productName = VoltFlowUITests;
-			productReference = 42EF81DB2D4D3B5E0022E999 /* VoltFlowUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		42EF81B92D4D3B580022E999 /* Project object */ = {
+		A8296C64FF712494C764AE09 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
-				TargetAttributes = {
-					42EF81C02D4D3B580022E999 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					42EF81D02D4D3B5E0022E999 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 42EF81C02D4D3B580022E999;
-					};
-					42EF81DA2D4D3B5E0022E999 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 42EF81C02D4D3B580022E999;
-					};
-				};
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 			};
-			buildConfigurationList = 42EF81BC2D4D3B580022E999 /* Build configuration list for PBXProject "VoltFlow" */;
+			buildConfigurationList = 551CD1BB8B21D767D7EF222E /* Build configuration list for PBXProject "VoltFlow" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 42EF81B82D4D3B580022E999;
-			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 42EF81C22D4D3B580022E999 /* Products */;
+			mainGroup = DC613FB29591B3A982D1BB47;
+			packageReferences = (
+				2EA6751D3C6429567C454972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42EF81C02D4D3B580022E999 /* VoltFlow */,
-				42EF81D02D4D3B5E0022E999 /* VoltFlowTests */,
-				42EF81DA2D4D3B5E0022E999 /* VoltFlowUITests */,
+				90990F3B7DA2D5EDE14CF3A8 /* VoltFlow */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		42EF81BF2D4D3B580022E999 /* Resources */ = {
+		70FAECC9AA01DEFD0B07CC48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42EF81CF2D4D3B5E0022E999 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42EF81D92D4D3B5E0022E999 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				01B51B1A811509AE976A07D2 /* Assets.xcassets in Resources */,
+				721EE2BA4157200626C2991D /* GoogleService-Info.plist in Resources */,
+				546C19FDB5992660C9E2B7CC /* LaunchScreen.storyboard in Resources */,
+				05B4BA6747DA9CDD044A103D /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		42EF81BD2D4D3B580022E999 /* Sources */ = {
+		D028C5C82E34EF2A3E320EE4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42EF81CD2D4D3B5E0022E999 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42EF81D72D4D3B5E0022E999 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				D00E9AB35E901377B2B4BB45 /* AuthenticationService.swift in Sources */,
+				0D2166849E5BBC4AC779BE51 /* AuthenticationView.swift in Sources */,
+				0916CF13F1652DB8AB9C5F72 /* BiometricAuthService.swift in Sources */,
+				7E4F770EB1BD205F409B84D7 /* Car.swift in Sources */,
+				4AB9E4FB3CD2579216F7FB49 /* CarService.swift in Sources */,
+				451125BCAE78C60C667D3FEF /* CarStatusView.swift in Sources */,
+				FD75815B4018595B292E9F6E /* ChargingMapView.swift in Sources */,
+				91592057CED57484AFE3C689 /* ChargingStation.swift in Sources */,
+				DAA51A3E0E0BFA4EEAF25F33 /* Config.swift in Sources */,
+				80729B362A21F80A90FD71EE /* ContentView.swift in Sources */,
+				5CB8D7C79F8AC01C2CEEA681 /* FirebaseService.swift in Sources */,
+				6395B51108D4AEC059364418 /* KeychainService.swift in Sources */,
+				AA9ED2A8468C99F8A1B17512 /* LaunchScreenView.swift in Sources */,
+				541AF628B4C6683CCCCA6D21 /* LocationManager.swift in Sources */,
+				DA7C5C7A3FF243852243B1EB /* ProfileView.swift in Sources */,
+				92B32722E7359ECA13A41EA8 /* TomTomResponse.swift in Sources */,
+				E6F229A6D0FE7401DD5A683C /* User.swift in Sources */,
+				AA4951C047AA9E310C9349CC /* VoltFlowApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		42EF81D32D4D3B5E0022E999 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 42EF81C02D4D3B580022E999 /* VoltFlow */;
-			targetProxy = 42EF81D22D4D3B5E0022E999 /* PBXContainerItemProxy */;
+/* Begin PBXVariantGroup section */
+		F884578ED0D33C1113DBDD51 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B3B68689D339D96251C606A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
 		};
-		42EF81DD2D4D3B5E0022E999 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 42EF81C02D4D3B580022E999 /* VoltFlow */;
-			targetProxy = 42EF81DC2D4D3B5E0022E999 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		42EF81E32D4D3B5E0022E999 /* Debug */ = {
+		1602F68F8D3EC8CB35633081 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = AV7QUGJFHL;
+				INFOPLIST_FILE = VoltFlow/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/Frameworks",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltflow.VoltFlow;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		21FAEDDFFA45B261E4FCD9F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = AV7QUGJFHL;
+				INFOPLIST_FILE = VoltFlow/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltflow.VoltFlow;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		42EF81E42D4D3B5E0022E999 /* Release */ = {
+		42CA5BD13EEE06D09C3C29A5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -369,8 +335,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -378,188 +343,136 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		42EF81E62D4D3B5E0022E999 /* Debug */ = {
+		9E3F517A7AD13AC70B72639B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"VoltFlow/Preview Content\"";
-				DEVELOPMENT_TEAM = AV7QUGJFHL;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "VoltFlow needs your location to find nearby charging stations and provide real-time updates.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "VoltFlow needs your location to find nearby charging stations.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				LD_RUNPATH_SEARCH_PATHS = (
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"DEBUG=1",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.voltflow.VoltFlow;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
-		};
-		42EF81E72D4D3B5E0022E999 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"VoltFlow/Preview Content\"";
-				DEVELOPMENT_TEAM = AV7QUGJFHL;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "VoltFlow needs your location to find nearby charging stations and provide real-time updates.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "VoltFlow needs your location to find nearby charging stations.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.voltflow.VoltFlow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		42EF81E92D4D3B5E0022E999 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AV7QUGJFHL;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.KRcompany.VoltFlowTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoltFlow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoltFlow";
-			};
-			name = Debug;
-		};
-		42EF81EA2D4D3B5E0022E999 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AV7QUGJFHL;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.KRcompany.VoltFlowTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoltFlow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoltFlow";
-			};
-			name = Release;
-		};
-		42EF81EC2D4D3B5E0022E999 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AV7QUGJFHL;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.KRcompany.VoltFlowUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = VoltFlow;
-			};
-			name = Debug;
-		};
-		42EF81ED2D4D3B5E0022E999 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AV7QUGJFHL;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.KRcompany.VoltFlowUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = VoltFlow;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		42EF81BC2D4D3B580022E999 /* Build configuration list for PBXProject "VoltFlow" */ = {
+		551CD1BB8B21D767D7EF222E /* Build configuration list for PBXProject "VoltFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				42EF81E32D4D3B5E0022E999 /* Debug */,
-				42EF81E42D4D3B5E0022E999 /* Release */,
+				9E3F517A7AD13AC70B72639B /* Debug */,
+				42CA5BD13EEE06D09C3C29A5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		42EF81E52D4D3B5E0022E999 /* Build configuration list for PBXNativeTarget "VoltFlow" */ = {
+		89F8984CED3D8BCE1B555004 /* Build configuration list for PBXNativeTarget "VoltFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				42EF81E62D4D3B5E0022E999 /* Debug */,
-				42EF81E72D4D3B5E0022E999 /* Release */,
+				21FAEDDFFA45B261E4FCD9F0 /* Debug */,
+				1602F68F8D3EC8CB35633081 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		42EF81E82D4D3B5E0022E999 /* Build configuration list for PBXNativeTarget "VoltFlowTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				42EF81E92D4D3B5E0022E999 /* Debug */,
-				42EF81EA2D4D3B5E0022E999 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		42EF81EB2D4D3B5E0022E999 /* Build configuration list for PBXNativeTarget "VoltFlowUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				42EF81EC2D4D3B5E0022E999 /* Debug */,
-				42EF81ED2D4D3B5E0022E999 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2EA6751D3C6429567C454972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.19.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2ADA6EBD9F13CB228B043D53 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EA6751D3C6429567C454972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		6FB9C72BA48A2B208FC65BB4 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EA6751D3C6429567C454972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		A23F2397399238AB0F9B5CD8 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EA6751D3C6429567C454972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		FFAAB46FDFB70A72EF9E3C6B /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EA6751D3C6429567C454972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 42EF81B92D4D3B580022E999 /* Project object */;
+	rootObject = A8296C64FF712494C764AE09 /* Project object */;
 }

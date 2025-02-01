@@ -37,7 +37,9 @@ class CarService: CarServiceProtocol, ObservableObject {
             range: 212,
             location: Location(latitude: 34.0522, longitude: -118.2437, address: "Beverly Hills"),
             isCharging: true,
-            temperature: 20.0
+            temperature: 20.0,
+            mileage: 15000,
+            engineStarted: false
         )
     }
     

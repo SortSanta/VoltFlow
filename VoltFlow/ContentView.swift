@@ -9,48 +9,46 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var carService = CarService()
-    @State private var selectedTab = 0
+    @EnvironmentObject private var firebaseService: FirebaseService
     
-    var mockCar = Car(
-        id: "1",
+    // Mock data for development
+    let mockCar = Car(
+        id: "mock1",
         brand: .tesla,
-        model: "Roadster",
-        batteryLevel: 0.67,
-        range: 212,
-        location: Location(latitude: 34.0522, longitude: -118.2437, address: "Beverly Hills"),
+        model: "Model 3",
+        batteryLevel: 0.65,
+        range: 350,
+        location: Location(latitude: 37.7749, longitude: -122.4194, address: "San Francisco"),
         isCharging: false,
         temperature: 20.0,
-        mileage: 24140,
+        mileage: 15000,
         engineStarted: false
     )
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView {
             CarStatusView(car: mockCar)
                 .tabItem {
-                    Image(systemName: "car.fill")
-                    Text("Car")
+                    Label("Status", systemImage: "car.fill")
                 }
-                .tag(0)
             
             ChargingMapView()
                 .tabItem {
-                    Image(systemName: "bolt.fill")
-                    Text("Charging")
+                    Label("Map", systemImage: "map.fill")
                 }
-                .tag(1)
             
-            Text("Settings")
+            ProfileView()
                 .tabItem {
-                    Image(systemName: "gear")
-                    Text("Settings")
+                    Label("Profile", systemImage: "person.fill")
                 }
-                .tag(2)
         }
         .preferredColorScheme(.dark)
     }
 }
 
+#if DEBUG
 #Preview {
     ContentView()
+        .environmentObject(FirebaseService.shared)
 }
+#endif

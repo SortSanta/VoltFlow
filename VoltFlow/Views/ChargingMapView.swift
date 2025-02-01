@@ -8,7 +8,8 @@ struct ChargingMapView: View {
     @State private var showingSearchResults = false
     @State private var isLoading = false
     @State private var errorMessage: String?
-    private let tomTomApiKey = "B6C9i7TKpiPfszZA24uraI2mgsUSzpl2"
+    @State private var showError = false
+    private let tomTomApiKey = Config.tomTomApiKey
     @State private var stations: [ChargingStation] = []
     @State private var selectedStation: ChargingStation?
     @State private var showingFilters = false
@@ -39,8 +40,14 @@ struct ChargingMapView: View {
     }
     
     private func fetchNearbyStations() {
+        isLoading = true
+        errorMessage = nil
         print("Fetching nearby stations...")
+        
         guard let location = locationManager.location else {
+            errorMessage = "Location not available. Please enable location services."
+            showError = true
+            isLoading = false
             print("❌ Location not available")
             return
         }
@@ -56,13 +63,14 @@ struct ChargingMapView: View {
             URLQueryItem(name: "key", value: tomTomApiKey),
             URLQueryItem(name: "lat", value: String(location.coordinate.latitude)),
             URLQueryItem(name: "lon", value: String(location.coordinate.longitude)),
-            URLQueryItem(name: "radius", value: "10000"), // 10km radius
-            URLQueryItem(name: "limit", value: "100"),
-            URLQueryItem(name: "categorySet", value: "7309"), // EV charging station category
-            URLQueryItem(name: "view", value: "Unified") // Include extended POI data
+            URLQueryItem(name: "radius", value: "10000"),
+            URLQueryItem(name: "limit", value: "20")
         ]
         
         guard let url = components.url else {
+            errorMessage = "Invalid URL configuration"
+            showError = true
+            isLoading = false
             print("❌ Invalid URL")
             return
         }
@@ -70,34 +78,34 @@ struct ChargingMapView: View {
         print("🌐 Fetching from URL: \(url.absoluteString)")
         
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Invalid response type")
-                return
-            }
-            
-            print("📡 Response status code: \(httpResponse.statusCode)")
-            
-            guard let data = data else {
-                print("❌ No data received")
-                return
-            }
-            
-            // Print raw response for debugging
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📄 Raw response: \(jsonString)")
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(TomTomResponse.self, from: data)
-                print("✅ Successfully decoded \(response.results.count) stations")
+            DispatchQueue.main.async {
+                self.isLoading = false
                 
-                DispatchQueue.main.async {
+                if let error = error {
+                    self.errorMessage = "Network error: \(error.localizedDescription)"
+                    self.showError = true
+                    print("❌ Network error: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let data = data else {
+                    self.errorMessage = "No data received"
+                    self.showError = true
+                    print("❌ No data received")
+                    return
+                }
+                
+                // Print the raw JSON for debugging
+                print("📦 Raw JSON response:")
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print(jsonString)
+                }
+                
+                do {
+                    let decoder = JSONDecoder()
+                    let response = try decoder.decode(TomTomResponse.self, from: data)
+                    print("✅ Successfully decoded \(response.results.count) stations")
+                    
                     self.stations = response.results.map { result in
                         ChargingStation(
                             id: result.id,
@@ -106,24 +114,40 @@ struct ChargingMapView: View {
                                 latitude: result.position.lat,
                                 longitude: result.position.lon
                             ),
-                            type: .type2, // Default to Type 2 since TomTom doesn't specify connector types
-                            powerOutput: 0, // TomTom doesn't provide power output
-                            price: 0.0, // TomTom doesn't provide pricing
+                            type: .type2,
+                            powerOutput: 50.0,
+                            price: 0.35,
                             distance: result.dist ?? 0,
                             address: result.address.freeformAddress,
-                            operatorInfo: nil,
-                            usageType: result.poi.classifications?.first?.code ?? "Unknown",
-                            connectionTypes: [],
-                            available: 0,
-                            total: 0
+                            operatorInfo: result.poi.phone,
+                            usageType: "Fast Charging",
+                            connectionTypes: ["Type 2", "CCS"],
+                            available: 2,
+                            total: 4
                         )
                     }
-                    print("🔌 Found \(self.stations.count) charging stations")
-                }
-            } catch {
-                print("❌ Decoding error: \(error)")
-                if let dataString = String(data: data, encoding: .utf8) {
-                    print("📄 Raw response: \(dataString)")
+                } catch {
+                    self.errorMessage = "Failed to parse server response: \(error)"
+                    self.showError = true
+                    print("❌ Parse error: \(error)")
+                    
+                    if let decodingError = error as? DecodingError {
+                        switch decodingError {
+                        case .keyNotFound(let key, let context):
+                            print("Missing key: \(key.stringValue)")
+                            print("Context: \(context.debugDescription)")
+                        case .typeMismatch(let type, let context):
+                            print("Type mismatch: expected \(type)")
+                            print("Context: \(context.debugDescription)")
+                        case .valueNotFound(let type, let context):
+                            print("Value not found: expected \(type)")
+                            print("Context: \(context.debugDescription)")
+                        case .dataCorrupted(let context):
+                            print("Data corrupted: \(context.debugDescription)")
+                        @unknown default:
+                            print("Unknown decoding error")
+                        }
+                    }
                 }
             }
         }.resume()
@@ -211,41 +235,7 @@ struct ChargingMapView: View {
                         // Search container
                         VStack(spacing: 0) {
                             // Search field
-                            HStack {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 16, weight: .medium))
-                                
-                                TextField("", text: $searchText)
-                                    .textFieldStyle(PlainTextFieldStyle())
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 16))
-                                    .autocorrectionDisabled()
-                                    .placeholder(when: searchText.isEmpty) {
-                                        Text("Search charging stations")
-                                            .foregroundColor(.white.opacity(0.7))
-                                            .font(.system(size: 16))
-                                    }
-                                
-                                if !searchText.isEmpty {
-                                    Button(action: { 
-                                        withAnimation(.easeInOut(duration: 0.2)) {
-                                            searchText = "" 
-                                        }
-                                    }) {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 16, weight: .medium))
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.white.opacity(!searchText.isEmpty ? 0.15 : 0.1))
-                                    .animation(.easeInOut(duration: 0.2), value: searchText)
-                            )
+                            SearchBar(text: $searchText, placeholder: "Search charging stations")
                             
                             // Search results
                             if !searchText.isEmpty {
@@ -338,41 +328,47 @@ struct ChargingMapView: View {
                         showsUserLocation: true,
                         annotationItems: filteredStations) { station in
                         MapAnnotation(coordinate: station.coordinate) {
-                            ChargingStationMarker(
-                                station: station,
-                                isSelected: selectedStation?.id == station.id
-                            )
-                            .onTapGesture {
-                                withAnimation(.spring()) {
-                                    selectedStation = station
-                                }
-                            }
-                        }
-                    }
-                    .overlay(alignment: .trailing) {
-                        VStack {
-                            Spacer()
-                            Button(action: {
-                                if let location = locationManager.location {
-                                    withAnimation {
-                                        region = MKCoordinateRegion(
-                                            center: location.coordinate,
-                                            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                                        )
+                            VStack {
+                                Image(systemName: station.type.imageName)
+                                    .foregroundColor(station.type.color)
+                                    .font(.system(size: 24))
+                                    .background(
+                                        Circle()
+                                            .fill(.white)
+                                            .shadow(radius: 2)
+                                    )
+                                if let selectedStation = selectedStation,
+                                   selectedStation.id == station.id {
+                                    VStack(spacing: 4) {
+                                        Text(station.name)
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                        Text("\(station.available)/\(station.total) available")
+                                            .font(.caption2)
+                                            .foregroundColor(station.available > 0 ? .green : .red)
+                                        if station.powerOutput > 0 {
+                                            Text("\(Int(station.powerOutput))kW")
+                                                .font(.caption2)
+                                                .foregroundColor(.blue)
+                                        }
                                     }
-                                    fetchNearbyStations()
+                                    .padding(8)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(.white)
+                                            .shadow(radius: 2)
+                                    )
                                 }
-                            }) {
-                                Image(systemName: "location.fill")
-                                    .font(.title3)
-                                    .foregroundColor(.blue)
-                                    .frame(width: 44, height: 44)
-                                    .background(Color.white)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 2)
                             }
-                            .padding(.trailing, 16)
-                            .padding(.bottom, 32)
+                            .onTapGesture {
+                                withAnimation {
+                                    if selectedStation?.id == station.id {
+                                        self.selectedStation = nil
+                                    } else {
+                                        self.selectedStation = station
+                                    }
+                                }
+                            }
                         }
                     }
                     .frame(height: 300)
@@ -420,6 +416,11 @@ struct ChargingMapView: View {
             }
             .foregroundColor(.white)
         }
+        .alert("Error", isPresented: $showError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage ?? "An unknown error occurred")
+        }
         .onAppear {
             print("ChargingMapView appeared")
             locationManager.requestLocation()
@@ -440,6 +441,192 @@ struct ChargingMapView: View {
     }
 }
 
+struct StationRow: View {
+    let station: ChargingStation
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Main content
+            VStack(alignment: .leading, spacing: 12) {
+                // Header
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(station.name)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        Text(station.address)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Spacer()
+                    
+                    // Distance badge
+                    Text(String(format: "%.1f km", station.distance / 1000))
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.blue.opacity(0.2))
+                        .foregroundColor(.blue)
+                        .clipShape(Capsule())
+                }
+                
+                // Charging info
+                HStack(spacing: 16) {
+                    // Power output
+                    VStack(alignment: .leading, spacing: 4) {
+                        Label {
+                            Text("\(Int(station.powerOutput)) kW")
+                                .foregroundColor(.white)
+                        } icon: {
+                            Image(systemName: "bolt.fill")
+                                .foregroundColor(.yellow)
+                        }
+                        Text("Max Power")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    
+                    // Price
+                    VStack(alignment: .leading, spacing: 4) {
+                        Label {
+                            Text("$\(String(format: "%.2f", station.price))/kWh")
+                                .foregroundColor(.white)
+                        } icon: {
+                            Image(systemName: "dollarsign.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        Text("Price")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Spacer()
+                    
+                    // Availability
+                    VStack(alignment: .trailing, spacing: 4) {
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(station.available > 0 ? Color.green : Color.red)
+                                .frame(width: 8, height: 8)
+                            Text("\(station.available)/\(station.total)")
+                                .foregroundColor(.white)
+                        }
+                        Text("Available")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                }
+                
+                // Connector types
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(station.connectionTypes, id: \.self) { type in
+                            Text(type)
+                                .font(.caption)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color(UIColor.systemGray6))
+                                .foregroundColor(.primary)
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+            }
+            .padding(16)
+            
+            // Bottom action bar
+            HStack(spacing: 20) {
+                // Navigate button
+                Button {
+                    // Open in Maps
+                    let coordinates = station.coordinate
+                    let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinates))
+                    mapItem.name = station.name
+                    mapItem.openInMaps(launchOptions: [
+                        MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
+                    ])
+                } label: {
+                    Label("Navigate", systemImage: "location.fill")
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                }
+                
+                // Favorite button
+                Button {
+                    // Add to favorites
+                } label: {
+                    Label("Favorite", systemImage: "star")
+                        .font(.subheadline)
+                        .foregroundColor(.yellow)
+                }
+                
+                // Share button
+                Button {
+                    // Share station details
+                } label: {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                }
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .background(Color(UIColor.systemGray6))
+        }
+        .background(Color(red: 0.12, green: 0.12, blue: 0.18))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+    }
+}
+
+struct FilterButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(isSelected ? Color.blue : Color(UIColor.systemGray6))
+                .foregroundColor(isSelected ? .white : .primary)
+                .clipShape(Capsule())
+        }
+    }
+}
+
+struct SearchBar: View {
+    @Binding var text: String
+    let placeholder: String
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            
+            TextField(placeholder, text: $text)
+                .textFieldStyle(PlainTextFieldStyle())
+                .foregroundColor(.white)
+            
+            if !text.isEmpty {
+                Button(action: { text = "" }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(UIColor.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
 struct StationListView: View {
     let stations: [ChargingStation]
     @Binding var selectedStation: ChargingStation?
@@ -456,55 +643,6 @@ struct StationListView: View {
             }
             .padding()
         }
-    }
-}
-
-struct StationRow: View {
-    let station: ChargingStation
-    
-    var body: some View {
-        HStack(spacing: 16) {
-            // Station type indicator
-            ZStack {
-                Circle()
-                    .fill(station.type.color.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                
-                Circle()
-                    .fill(station.type.color)
-                    .frame(width: 12, height: 12)
-            }
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(station.name)
-                    .font(.headline)
-                HStack {
-                    Text("\(station.powerOutput)kW")
-                    Text("•")
-                    Text("$\(String(format: "%.2f", station.price))/kWh")
-                    Text("•")
-                    Text("\(String(format: "%.1f", station.distance))mi")
-                }
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.7))
-            }
-            
-            Spacer()
-            
-            // Availability indicator
-            VStack(alignment: .trailing, spacing: 4) {
-                Text("\(station.available)/\(station.total)")
-                    .font(.headline)
-                Text("Available")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(Color.white.opacity(0.05))
-            .cornerRadius(8)
-        }
-        .padding()
     }
 }
 

@@ -1,19 +1,42 @@
 name: VoltFlow
 options:
   bundleIdPrefix: com.voltflow
+  deploymentTarget:
+    iOS: 15.0
+packages:
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    exactVersion: 10.19.1
 targets:
   VoltFlow:
     type: application
     platform: iOS
-    deploymentTarget: "14.0"
     sources: [VoltFlow]
+    dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: Firebase
+        product: FirebaseFirestoreSwift
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: 1
+        DEVELOPMENT_TEAM: "" # Add your team ID here
     info:
       path: VoltFlow/Info.plist
       properties:
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
-        UILaunchStoryboardName: LaunchScreen
+        UILaunchStoryboardName: ""
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        NSFaceIDUsageDescription: "VoltFlow uses Face ID to securely sign you in."
         NSLocationWhenInUseUsageDescription: "VoltFlow needs your location to find nearby charging stations."
-        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSLocationAlwaysAndWhenInUseUsageDescription: "VoltFlow needs your location to find nearby charging stations and provide navigation."
