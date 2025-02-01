@@ -1,8 +1,229 @@
 import SwiftUI
 import MapKit
 
+// MARK: - Smart Energy Models
+struct DrivingSession: Identifiable {
+    let id = UUID()
+    let startTime: Date
+    let endTime: Date
+    let averageSpeed: Double
+    let energyUsed: Double
+    let distance: Double
+}
+
+struct EfficiencyScore {
+    let overall: Double // 0-100
+    let acceleration: Double // 0-100
+    let braking: Double // 0-100
+    let energyUsage: Double // kWh/100km
+    
+    static var preview: EfficiencyScore {
+        EfficiencyScore(
+            overall: 85,
+            acceleration: 90,
+            braking: 82,
+            energyUsage: 16.8
+        )
+    }
+}
+
+struct DrivingTip: Identifiable {
+    let id = UUID()
+    let title: String
+    let description: String
+    let potentialSaving: Double // kWh
+    let category: TipCategory
+    
+    enum TipCategory {
+        case acceleration
+        case braking
+        case climate
+        case route
+        case charging
+    }
+}
+
+// MARK: - Smart Energy ViewModel
+class SmartEnergyViewModel: ObservableObject {
+    @Published var efficiencyScore: EfficiencyScore
+    @Published var drivingTips: [DrivingTip]
+    @Published var recentSessions: [DrivingSession]
+    
+    init() {
+        // TODO: Replace with real data
+        self.efficiencyScore = EfficiencyScore.preview
+        self.drivingTips = [
+            DrivingTip(
+                title: "Smooth Acceleration",
+                description: "Gradual acceleration can improve your efficiency by up to 10%",
+                potentialSaving: 0.8,
+                category: .acceleration
+            ),
+            DrivingTip(
+                title: "Optimal Climate",
+                description: "Using seat heaters instead of cabin heat can extend your range",
+                potentialSaving: 1.2,
+                category: .climate
+            )
+        ]
+        self.recentSessions = []
+    }
+}
+
+// MARK: - Smart Energy Views
+struct EfficiencyScoreCard: View {
+    let score: EfficiencyScore
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            HStack {
+                Text("Efficiency Score")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Spacer()
+                Text("\(Int(score.overall))")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(scoreColor)
+            }
+            
+            HStack(spacing: 20) {
+                ScoreMetric(
+                    title: "Acceleration",
+                    value: score.acceleration,
+                    icon: "speedometer"
+                )
+                
+                ScoreMetric(
+                    title: "Braking",
+                    value: score.braking,
+                    icon: "brake"
+                )
+                
+                ScoreMetric(
+                    title: "Energy",
+                    value: score.energyUsage,
+                    unit: "kWh/100km",
+                    icon: "bolt.circle"
+                )
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.black.opacity(0.3))
+        )
+    }
+    
+    private var scoreColor: Color {
+        switch score.overall {
+        case 90...: return .green
+        case 70...: return .yellow
+        default: return .orange
+        }
+    }
+}
+
+struct ScoreMetric: View {
+    let title: String
+    let value: Double
+    var unit: String = ""
+    let icon: String
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(.gray)
+            
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.gray)
+            
+            Text("\(Int(value))\(unit)")
+                .font(.system(.body, design: .rounded))
+                .foregroundColor(.white)
+        }
+    }
+}
+
+struct DrivingTipsView: View {
+    let tips: [DrivingTip]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Smart Tips")
+                .font(.headline)
+                .foregroundColor(.white)
+            
+            ForEach(tips) { tip in
+                TipCard(tip: tip)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.black.opacity(0.3))
+        )
+    }
+}
+
+struct TipCard: View {
+    let tip: DrivingTip
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: iconName)
+                .font(.title2)
+                .foregroundColor(iconColor)
+                .frame(width: 40, height: 40)
+                .background(iconColor.opacity(0.2))
+                .clipShape(Circle())
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(tip.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white)
+                
+                Text(tip.description)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                
+                if tip.potentialSaving > 0 {
+                    Text("Potential saving: \(String(format: "%.1f", tip.potentialSaving)) kWh")
+                        .font(.caption)
+                        .foregroundColor(.green)
+                }
+            }
+        }
+        .padding(.vertical, 8)
+    }
+    
+    private var iconName: String {
+        switch tip.category {
+        case .acceleration: return "speedometer"
+        case .braking: return "brake"
+        case .climate: return "thermometer"
+        case .route: return "map"
+        case .charging: return "bolt.circle"
+        }
+    }
+    
+    private var iconColor: Color {
+        switch tip.category {
+        case .acceleration: return .blue
+        case .braking: return .purple
+        case .climate: return .orange
+        case .route: return .green
+        case .charging: return .yellow
+        }
+    }
+}
+
+// MARK: - Main View
 struct CarStatusView: View {
     let car: Car
+    @StateObject private var smartEnergy = SmartEnergyViewModel()
     @State private var selectedTab = "Status"
     @Environment(\.colorScheme) var colorScheme
     @State private var isClimateOn = false
@@ -241,6 +462,14 @@ struct CarStatusView: View {
                                         }
                                     }
                                 }
+                            }
+                            
+                            StatusCard {
+                                EfficiencyScoreCard(score: smartEnergy.efficiencyScore)
+                            }
+                            
+                            StatusCard {
+                                DrivingTipsView(tips: smartEnergy.drivingTips)
                             }
                             
                             StatusCard {
