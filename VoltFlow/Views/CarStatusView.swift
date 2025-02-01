@@ -13,6 +13,8 @@ struct CarStatusView: View {
     @State private var isSentryMode = true
     @State private var isPinToDrive = false
     @State private var isChildLock = true
+    @State private var isDragging = false
+    @State private var dragAngle: Double = 0
     
     let tabs = ["Status", "Climate", "Battery", "Safety", "Location"]
     let climateModes = ["Auto", "Cool", "Heat", "Fan", "Off"]
@@ -368,41 +370,110 @@ struct CarStatusView: View {
     
     // MARK: - Climate Control Components
     
+    private struct TemperatureMarker: View {
+        let temperature: Int
+        
+        private func position(for temperature: Int) -> CGPoint {
+            let angle = (Double(temperature - 16) / 14.0 * 2 * .pi) - .pi/2
+            return CGPoint(
+                x: 100 + 115 * cos(angle),
+                y: 100 + 115 * sin(angle)
+            )
+        }
+        
+        var body: some View {
+            let pos = position(for: temperature)
+            Text("\(temperature)°")
+                .font(.caption2)
+                .foregroundColor(.gray)
+                .position(x: pos.x, y: pos.y)
+        }
+    }
+    
+    private var temperatureMarkers: some View {
+        ZStack {
+            ForEach([16, 20, 24, 28], id: \.self) { temp in
+                TemperatureMarker(temperature: temp)
+            }
+        }
+    }
+    
+    private func handlePosition(for temperature: Double) -> CGPoint {
+        let angle = (temperature - 16) / 14.0 * 2 * .pi - .pi/2
+        return CGPoint(
+            x: 100 + 100 * cos(angle),
+            y: 100 + 100 * sin(angle)
+        )
+    }
+    
+    private var dragHandle: some View {
+        let pos = handlePosition(for: targetTemperature)
+        return Circle()
+            .fill(Color.white)
+            .frame(width: 12, height: 12)
+            .position(x: pos.x, y: pos.y)
+            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
+    }
+    
+    private var progressRing: some View {
+        Circle()
+            .trim(from: 0, to: min(CGFloat(targetTemperature - 16) / 14.0, 1.0))
+            .stroke(
+                LinearGradient(
+                    colors: [.blue, .purple],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                style: StrokeStyle(lineWidth: 30, lineCap: .round)
+            )
+            .frame(width: 200, height: 200)
+            .rotationEffect(.degrees(-90))
+    }
+    
+    private var centerDisplay: some View {
+        VStack(spacing: 4) {
+            Text("\(targetTemperature, specifier: "%.1f")°")
+                .font(.system(size: 48, weight: .medium))
+                .foregroundColor(.white)
+            
+            Text("TARGET")
+                .font(.caption)
+                .foregroundColor(.gray)
+            
+            Text("Drag to adjust")
+                .font(.caption2)
+                .foregroundColor(.gray)
+                .opacity(isDragging ? 0 : 0.8)
+        }
+    }
+    
     private var temperatureRingView: some View {
         ZStack {
-            // Background Ring
             Circle()
                 .stroke(Color.white.opacity(0.1), lineWidth: 30)
-                .frame(width: 220, height: 220)
+                .frame(width: 200, height: 200)
             
-            // Temperature Progress
-            Circle()
-                .trim(from: 0, to: min(CGFloat(targetTemperature) / 30.0, 1.0))
-                .stroke(
-                    LinearGradient(
-                        colors: [.blue, .purple],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    style: StrokeStyle(lineWidth: 30, lineCap: .round)
-                )
-                .frame(width: 220, height: 220)
-                .rotationEffect(.degrees(-90))
-            
-            // Center Temperature Display
-            VStack(spacing: 8) {
-                Text("\(targetTemperature, specifier: "%.1f")°")
-                    .font(.system(size: 54, weight: .medium))
-                    .foregroundColor(.white)
-                
-                Text("TARGET")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            
-            temperatureControlButtons
+            progressRing
+            centerDisplay
         }
+        .frame(maxWidth: .infinity)
         .padding(.top, 20)
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { value in
+                    isDragging = true
+                    let center = CGPoint(x: 100, y: 100)
+                    let location = value.location
+                    let angle = atan2(location.y - center.y, location.x - center.x)
+                    let degrees = angle * 180 / .pi + 90
+                    let normalizedDegrees = (degrees + 360).truncatingRemainder(dividingBy: 360)
+                    let temperature = 16 + (normalizedDegrees / 360) * 14
+                    targetTemperature = min(30, max(16, temperature))
+                }
+                .onEnded { _ in
+                    isDragging = false
+                }
+        )
     }
     
     private var temperatureControlButtons: some View {
