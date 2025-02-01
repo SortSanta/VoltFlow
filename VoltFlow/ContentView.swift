@@ -11,6 +11,29 @@ struct ContentView: View {
     @StateObject private var carService = CarService()
     @EnvironmentObject private var firebaseService: FirebaseService
     
+    init() {
+        // Customize tab bar appearance
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor(Color(red: 0.1, green: 0.1, blue: 0.15).opacity(0.95))
+        
+        // Customize unselected item appearance
+        appearance.stackedLayoutAppearance.normal.iconColor = .gray
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor.gray
+        ]
+        
+        // Customize selected item appearance
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.blue)
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: UIColor(Color.blue)
+        ]
+        
+        // Apply the appearance
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
     // Mock data for development
     let mockCar = Car(
         id: "mock1",
@@ -34,7 +57,7 @@ struct ContentView: View {
             
             ChargingMapView()
                 .tabItem {
-                    Label("Map", systemImage: "map.fill")
+                    Label("Map", systemImage: "bolt.car.fill")
                 }
             
             ProfileView()
@@ -43,6 +66,7 @@ struct ContentView: View {
                 }
         }
         .preferredColorScheme(.dark)
+        .tint(.blue) // Set the accent color for selected items
     }
 }
 

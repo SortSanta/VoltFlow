@@ -1,18 +1,28 @@
 import SwiftUI
+import MapKit
 
 struct CarStatusView: View {
     let car: Car
     @State private var selectedTab = "Status"
     @Environment(\.colorScheme) var colorScheme
+    @State private var isClimateOn = false
+    @State private var targetTemperature = 20.0
+    @State private var selectedClimateMode = "Auto"
+    @State private var scheduledTime = Date()
+    @State private var showingSchedulePicker = false
+    @State private var isSentryMode = true
+    @State private var isPinToDrive = false
+    @State private var isChildLock = true
     
     let tabs = ["Status", "Climate", "Battery", "Safety", "Location"]
+    let climateModes = ["Auto", "Cool", "Heat", "Fan", "Off"]
     
     var body: some View {
         ZStack {
             // Background color
             Color.black.edgesIgnoringSafeArea(.all)
             
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     // Header
                     HStack {
@@ -24,7 +34,7 @@ struct CarStatusView: View {
                                 Image(systemName: "battery.75")
                                 Text("\(Int(car.range)) km")
                                 Text("•")
-                                Text("Parked")
+                                Text(car.location.address ?? "Parked")
                             }
                             .font(.subheadline)
                             .foregroundColor(.gray)
@@ -77,7 +87,7 @@ struct CarStatusView: View {
                                 
                                 // Range indicator
                                 AnimatedGauge(
-                                    value: car.range,
+                                    value: Double(car.range),
                                     maxValue: 500,
                                     gradient: LinearGradient(
                                         gradient: Gradient(colors: [.purple, .blue]),
@@ -130,153 +140,529 @@ struct CarStatusView: View {
                     }
                     .padding(.horizontal)
                     
-                    // Tab Bar
+                    // Tab Bar and Content
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 24) {
                             ForEach(tabs, id: \.self) { tab in
                                 VStack(spacing: 8) {
                                     Text(tab)
                                         .foregroundColor(selectedTab == tab ? .white : .gray)
+                                        .font(.system(size: 17, weight: selectedTab == tab ? .semibold : .regular))
                                     
                                     Circle()
                                         .fill(selectedTab == tab ? Color.white : Color.clear)
                                         .frame(width: 4, height: 4)
                                 }
                                 .onTapGesture {
-                                    selectedTab = tab
+                                    withAnimation {
+                                        selectedTab = tab
+                                    }
                                 }
                             }
                         }
                         .padding(.horizontal)
                     }
                     
-                    // Status Cards
-                    VStack(spacing: 16) {
-                        // Battery Card
-                        StatusCard {
-                            VStack(alignment: .leading, spacing: 12) {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("Battery")
-                                            .foregroundColor(.gray)
-                                        Text("Last charge 2w ago")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                    }
-                                    Spacer()
-                                }
-                                
-                                HStack(alignment: .bottom, spacing: 8) {
-                                    Text("\(Int(car.range))")
-                                        .font(.system(size: 32, weight: .medium))
-                                    Text("km")
-                                        .font(.title3)
-                                        .foregroundColor(.gray)
-                                        .padding(.bottom, 4)
-                                }
-                                
-                                HStack(alignment: .center) {
-                                    // Battery Icon
-                                    BatteryView(level: car.batteryLevel)
-                                        .frame(width: 40, height: 20)
-                                    
-                                    Text("\(Int(car.batteryLevel * 100))%")
-                                        .font(.system(size: 15, weight: .medium))
-                                    Text("\(Int(car.batteryLevel * 117))kW")
-                                        .font(.system(size: 15))
-                                        .foregroundColor(.gray)
-                                }
+                    // Tab Content
+                    switch selectedTab {
+                    case "Status":
+                        // Status Cards
+                        VStack(spacing: 16) {
+                            // Battery Card
+                            StatusCard {
+                                batteryCardContent
+                            }
+                            
+                            // Climate Card
+                            StatusCard {
+                                climateCardContent
+                            }
+                            
+                            // Media Player Card
+                            StatusCard {
+                                mediaCardContent
                             }
                         }
+                        .padding(.horizontal)
                         
-                        // Climate Card
-                        StatusCard {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Climate")
-                                    .foregroundColor(.gray)
-                                
-                                HStack {
-                                    Button(action: { }) {
-                                        Image(systemName: "minus")
-                                            .font(.title2)
-                                            .frame(width: 44, height: 44)
-                                            .background(Color.white.opacity(0.1))
-                                            .clipShape(Circle())
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(Int(car.temperature))°")
-                                        .font(.system(size: 32, weight: .medium))
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: { }) {
-                                        Image(systemName: "plus")
-                                            .font(.title2)
-                                            .frame(width: 44, height: 44)
-                                            .background(Color.white.opacity(0.1))
-                                            .clipShape(Circle())
-                                    }
+                    case "Climate":
+                        VStack(spacing: 16) {
+                            // Main Climate Control Card
+                            StatusCard {
+                                VStack(spacing: 24) {
+                                    temperatureRingView
+                                    currentTemperatureView
+                                    climateModeButtons
                                 }
-                                
-                                HStack {
-                                    Image(systemName: "snowflake")
-                                    Text("Cooling")
-                                        .foregroundColor(.blue)
-                                    Spacer()
-                                    Text("A")
-                                        .font(.system(size: 18, weight: .medium))
-                                        .frame(width: 32, height: 32)
+                            }
+                            
+                            // Schedule Card
+                            StatusCard {
+                                scheduleView
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                    case "Battery":
+                        VStack(spacing: 16) {
+                            StatusCard {
+                                VStack(alignment: .leading, spacing: 16) {
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Current Charge")
+                                                .foregroundColor(.gray)
+                                            Text("\(Int(car.batteryLevel * 100))%")
+                                                .font(.system(size: 42, weight: .medium))
+                                        }
+                                        Spacer()
+                                        Image(systemName: "bolt.fill")
+                                            .font(.system(size: 24))
+                                            .foregroundColor(.green)
+                                    }
+                                    
+                                    Divider()
                                         .background(Color.white.opacity(0.1))
-                                        .clipShape(Circle())
+                                    
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Range")
+                                                .foregroundColor(.gray)
+                                            Text("\(Int(car.range)) km")
+                                                .font(.headline)
+                                        }
+                                        Spacer()
+                                        VStack(alignment: .trailing, spacing: 4) {
+                                            Text("Time to Full")
+                                                .foregroundColor(.gray)
+                                            Text("2h 15m")
+                                                .font(.headline)
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            StatusCard {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Nearby Chargers")
+                                        .foregroundColor(.gray)
+                                    
+                                    Button(action: {}) {
+                                        HStack {
+                                            Image(systemName: "bolt.car.fill")
+                                            Text("Find Charging Stations")
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                        }
+                                        .padding()
+                                        .background(Color.white.opacity(0.1))
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    }
                                 }
                             }
                         }
+                        .padding(.horizontal)
                         
-                        // Media Player Card
-                        StatusCard {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Playing now")
-                                    .foregroundColor(.gray)
-                                
-                                HStack {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color.purple)
-                                        .frame(width: 50, height: 50)
-                                        .overlay(
-                                            Image(systemName: "music.note")
-                                                .foregroundColor(.white)
-                                        )
+                    case "Safety":
+                        VStack(spacing: 16) {
+                            // Security Features Card
+                            StatusCard {
+                                VStack(alignment: .leading, spacing: 20) {
+                                    Text("Vehicle Security")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
                                     
-                                    VStack(alignment: .leading) {
-                                        Text("Seamless")
-                                            .font(.headline)
-                                        Text("feat. Kelis")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: { }) {
-                                        Image(systemName: "play.fill")
-                                            .font(.title2)
-                                            .foregroundColor(.white)
-                                            .frame(width: 44, height: 44)
+                                    VStack(spacing: 16) {
+                                        securityToggle(title: "Sentry Mode",
+                                                     icon: "shield.fill",
+                                                     color: .blue,
+                                                     isOn: $isSentryMode,
+                                                     description: "Monitor vehicle surroundings")
+                                        
+                                        Divider()
                                             .background(Color.white.opacity(0.1))
-                                            .clipShape(Circle())
+                                        
+                                        securityToggle(title: "PIN to Drive",
+                                                     icon: "lock.shield.fill",
+                                                     color: .green,
+                                                     isOn: $isPinToDrive,
+                                                     description: "Require PIN before driving")
+                                        
+                                        Divider()
+                                            .background(Color.white.opacity(0.1))
+                                        
+                                        securityToggle(title: "Child Lock",
+                                                     icon: "figure.child.circle.fill",
+                                                     color: .orange,
+                                                     isOn: $isChildLock,
+                                                     description: "Lock rear door controls")
+                                    }
+                                }
+                            }
+                            
+                            // Recent Activity Card
+                            StatusCard {
+                                VStack(alignment: .leading, spacing: 16) {
+                                    Text("Recent Activity")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                    
+                                    ForEach(recentActivityItems, id: \.time) { item in
+                                        HStack(spacing: 12) {
+                                            Image(systemName: item.icon)
+                                                .foregroundColor(item.color)
+                                                .font(.title3)
+                                            
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(item.title)
+                                                    .foregroundColor(.white)
+                                                Text(item.time)
+                                                    .font(.caption)
+                                                    .foregroundColor(.gray)
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            Image(systemName: "chevron.right")
+                                                .foregroundColor(.gray)
+                                        }
+                                        .padding()
+                                        .background(Color.white.opacity(0.05))
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
                                     }
                                 }
                             }
                         }
+                        .padding(.horizontal)
+                        
+                    case "Location":
+                        VStack(spacing: 16) {
+                            StatusCard {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Current Location")
+                                        .foregroundColor(.gray)
+                                    
+                                    Text(car.location.address ?? "Unknown Location")
+                                        .font(.headline)
+                                    
+                                    Button(action: {}) {
+                                        Label("Navigate to Car", systemImage: "location.fill")
+                                            .frame(maxWidth: .infinity)
+                                            .padding()
+                                            .background(Color.blue)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                    default:
+                        EmptyView()
                     }
-                    .padding(.horizontal)
                 }
                 .padding(.top)
             }
         }
         .foregroundColor(.white)
+    }
+    
+    // MARK: - Climate Control Components
+    
+    private var temperatureRingView: some View {
+        ZStack {
+            // Background Ring
+            Circle()
+                .stroke(Color.white.opacity(0.1), lineWidth: 30)
+                .frame(width: 220, height: 220)
+            
+            // Temperature Progress
+            Circle()
+                .trim(from: 0, to: min(CGFloat(targetTemperature) / 30.0, 1.0))
+                .stroke(
+                    LinearGradient(
+                        colors: [.blue, .purple],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    style: StrokeStyle(lineWidth: 30, lineCap: .round)
+                )
+                .frame(width: 220, height: 220)
+                .rotationEffect(.degrees(-90))
+            
+            // Center Temperature Display
+            VStack(spacing: 8) {
+                Text("\(targetTemperature, specifier: "%.1f")°")
+                    .font(.system(size: 54, weight: .medium))
+                    .foregroundColor(.white)
+                
+                Text("TARGET")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            temperatureControlButtons
+        }
+        .padding(.top, 20)
+    }
+    
+    private var temperatureControlButtons: some View {
+        HStack {
+            Button(action: { targetTemperature = max(16, targetTemperature - 0.5) }) {
+                Image(systemName: "minus")
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .frame(width: 44, height: 44)
+                    .background(temperatureButtonGradient)
+                    .clipShape(Circle())
+            }
+            .offset(x: -140)
+            
+            Button(action: { targetTemperature = min(30, targetTemperature + 0.5) }) {
+                Image(systemName: "plus")
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .frame(width: 44, height: 44)
+                    .background(temperatureButtonGradient)
+                    .clipShape(Circle())
+            }
+            .offset(x: 140)
+        }
+    }
+    
+    private var temperatureButtonGradient: LinearGradient {
+        LinearGradient(
+            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+    
+    private var currentTemperatureView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("CURRENT")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                Text("\(Int(car.temperature))°")
+                    .font(.title)
+                    .foregroundColor(.white)
+            }
+            Spacer()
+            Toggle("", isOn: $isClimateOn)
+                .tint(.blue)
+        }
+        .padding(.horizontal)
+    }
+    
+    private struct ClimateButton: View {
+        let mode: String
+        let isSelected: Bool
+        let action: () -> Void
+        let iconName: String
+        
+        private var buttonGradient: LinearGradient {
+            isSelected ?
+            LinearGradient(
+                colors: [.blue, .purple],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ) :
+            LinearGradient(
+                colors: [Color.white.opacity(0.1), Color.white.opacity(0.1)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+        
+        var body: some View {
+            Button(action: action) {
+                VStack(spacing: 8) {
+                    Image(systemName: iconName)
+                        .font(.title2)
+                    Text(mode)
+                        .font(.caption)
+                }
+                .frame(width: 70, height: 70)
+                .background(buttonGradient)
+                .foregroundColor(isSelected ? .white : .gray)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
+        }
+    }
+    
+    private var climateModeButtons: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(climateModes, id: \.self) { mode in
+                    ClimateButton(
+                        mode: mode,
+                        isSelected: selectedClimateMode == mode,
+                        action: { selectedClimateMode = mode },
+                        iconName: modeIcon(for: mode)
+                    )
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    private var scheduleView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Image(systemName: "clock.fill")
+                    .foregroundColor(.blue)
+                    .font(.title2)
+                Text("Schedule")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Spacer()
+                Button(action: { showingSchedulePicker.toggle() }) {
+                    Text(showingSchedulePicker ? "Done" : "Edit")
+                        .foregroundColor(.blue)
+                }
+            }
+            
+            if showingSchedulePicker {
+                DatePicker("Select Time", selection: $scheduledTime, displayedComponents: [.hourAndMinute, .date])
+                    .datePickerStyle(.graphical)
+                    .colorScheme(.dark)
+                    .accentColor(.blue)
+            } else {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("NEXT SCHEDULE")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        Text(scheduledTime, style: .time)
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
+                    Spacer()
+                    Toggle("", isOn: .constant(true))
+                        .tint(.blue)
+                }
+                .padding()
+                .background(Color.white.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+        }
+    }
+    
+    // MARK: - Card Content Views
+    
+    private var batteryCardContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Battery")
+                        .foregroundColor(.gray)
+                    Text("Last charge 2w ago")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+            }
+            
+            HStack(alignment: .bottom, spacing: 8) {
+                Text("\(Int(car.range))")
+                    .font(.system(size: 32, weight: .medium))
+                Text("km")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .padding(.bottom, 4)
+            }
+            
+            HStack(alignment: .center) {
+                BatteryView(level: car.batteryLevel)
+                    .frame(width: 40, height: 20)
+                
+                Text("\(Int(car.batteryLevel * 100))%")
+                    .font(.system(size: 15, weight: .medium))
+                Text("\(Int(car.batteryLevel * 117))kW")
+                    .font(.system(size: 15))
+                    .foregroundColor(.gray)
+            }
+        }
+    }
+    
+    private var climateCardContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Climate")
+                .foregroundColor(.gray)
+            
+            HStack {
+                Button(action: { }) {
+                    Image(systemName: "minus")
+                        .font(.title2)
+                        .frame(width: 44, height: 44)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(Circle())
+                }
+                
+                Spacer()
+                
+                Text("\(Int(car.temperature))°")
+                    .font(.system(size: 32, weight: .medium))
+                
+                Spacer()
+                
+                Button(action: { }) {
+                    Image(systemName: "plus")
+                        .font(.title2)
+                        .frame(width: 44, height: 44)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(Circle())
+                }
+            }
+            
+            HStack {
+                Image(systemName: "snowflake")
+                Text("Cooling")
+                    .foregroundColor(.blue)
+                Spacer()
+                Text("A")
+                    .font(.system(size: 18, weight: .medium))
+                    .frame(width: 32, height: 32)
+                    .background(Color.white.opacity(0.1))
+                    .clipShape(Circle())
+            }
+        }
+    }
+    
+    private var mediaCardContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Playing now")
+                .foregroundColor(.gray)
+            
+            HStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.purple)
+                    .frame(width: 50, height: 50)
+                    .overlay(
+                        Image(systemName: "music.note")
+                            .foregroundColor(.white)
+                    )
+                
+                VStack(alignment: .leading) {
+                    Text("Seamless")
+                        .font(.headline)
+                    Text("feat. Kelis")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                
+                Spacer()
+                
+                Button(action: { }) {
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .frame(width: 44, height: 44)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(Circle())
+                }
+            }
+        }
     }
 }
 
@@ -399,5 +785,50 @@ struct QuickActionButton: View {
             }
             .scaleEffect(isPressed ? 0.9 : 1.0)
         }
+    }
+}
+
+// MARK: - Helper Functions
+
+extension CarStatusView {
+    private func modeIcon(for mode: String) -> String {
+        switch mode {
+        case "Auto": return "a.circle.fill"
+        case "Cool": return "snowflake"
+        case "Heat": return "flame.fill"
+        case "Fan": return "wind"
+        default: return "power.circle.fill"
+        }
+    }
+    
+    private func securityToggle(title: String, icon: String, color: Color, isOn: Binding<Bool>, description: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundColor(color)
+                    .font(.title3)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .foregroundColor(.white)
+                    Text(description)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                
+                Spacer()
+                
+                Toggle("", isOn: isOn)
+                    .tint(color)
+            }
+        }
+    }
+    
+    private var recentActivityItems: [(icon: String, color: Color, title: String, time: String)] {
+        [
+            ("shield.fill", .blue, "Sentry Mode Activated", "2 hours ago"),
+            ("figure.walk", .orange, "Door Opened", "Yesterday at 9:30 PM"),
+            ("key.fill", .green, "Vehicle Unlocked", "Yesterday at 9:29 PM")
+        ]
     }
 }
